@@ -42,13 +42,13 @@ const obtenerTareas = async () => {
 
 const verTarea = async (id) => {
     // enviar consulta a la API para obtener la tarea con el id
-    alert('tera obtenida')
+    alert('tarea obtenida')
     return {
         "_id": "4",
         "titulo": "caminata en las mañanas",
         "descripcion": "salir a caminar en las mañanas",
         "estado": "activa",
-        "responsable": "sebas"
+        "responsable": "Leonardo"
     }
 }
 
@@ -95,6 +95,34 @@ article.appendChild(datos)
 listItem.appendChild(article)
 
 listaTareas.appendChild(listItem)
+
+// ---botones------
+const wrapperBotones = document.createElement("div")
+wrapperBotones.classList.add("wrapper-botones")
+
+const buttonVerMas = document.createElement("button")
+const buttonEditar = document.createElement("button")
+const buttonEliminar = document.createElement("button")
+
+buttonVerMas.innerText = "Ver más"
+buttonEditar.innerText = "Editar"
+buttonEliminar. innerText = "Eliminar"
+
+wrapperBotones.appendChild(buttonVerMas)
+wrapperBotones.appendChild(buttonEditar)
+wrapperBotones.appendChild(buttonEliminar)
+
+article.appendChild(wrapperBotones)
+
+//  ------agregar evento click al boton ver mas---
+buttonVerMas.addEventListener("click", async () => {
+    //console.log(tarea._id)
+    const tareaObtenida = await verTarea(tarea._id)
+    console.log(tareaObtenida)
+    
+})
+
+
 })
 
 }
