@@ -4,214 +4,203 @@ let tareas = [
         "titulo": "caminar",
         "descripcion": "salir a caminar en las mañanas",
         "estado": "activa",
-        "responsable": "Leonardo"
+        "responsable": "sebas"
     },
     {
         "_id": "2",
         "titulo": "ir al gimnasio",
         "descripcion": "salir al gimnasio en las tardes luego del trabajo",
         "estado": "activa",
-        "responsable": "Leonardo"
+        "responsable": "sebas"
     },
     {
         "_id": "3",
-        "titulo": "Pasear al perro",
+        "titulo": "Pasear al perror",
         "descripcion": "salir a caminar en las mañanas con el perro",
         "estado": "activa",
-        "responsable": "Leonardo"
+        "responsable": "sebas"
     },
     {
         "_id": "4",
         "titulo": "limpiar la cocina",
         "descripcion": "limpiar la cocina despues de cocinar",
         "estado": "activa",
-        "responsable": "Leonardo"
+        "responsable": "sebas"
     }
 ]
 
 const crearTarea = async (tarea) => {
     // enviar consulta a la API para crear una tarea
-    //alert('tarea creada')
-   await fetch("http://localhost:3000/api/v1/tareas", {
-    method: "POST", 
-    body: JSON.stringify(tarea)
-   })
-   // tarea.estado = "inactiva"
+    // alert('tarea creada')
 
-    //tareas.push(tarea)
+    tarea.estado = 'inactiva'
+    tareas.push(tarea)
 }
 
 const obtenerTareas = async () => {
     // enviar consulta a la API para obtener todas las tareas
-    const Response = await fetch("http://localhost:3000/api/v1/tareas")
-    const data = await Response.json()
-     return data.data
-    //return tareas
+
+    return tareas
 }
 
 const verTarea = async (id) => {
     // enviar consulta a la API para obtener la tarea con el id
-   //-- alert('tarea obtenida')
-   const Response = await fetch("http://localhost:3000/api/v1/tareas/" + id)
-   const data = await Response.json()
-    //if (id === tarea.) {
-        return data.data
+    // alert('tarea obtenida')
+    const tareaEncontrada = tareas.find((tarea) => {
+        if (id === tarea._id) {
+            return true
+        }
+        return false
+    })
+
+    if (tareaEncontrada) {
+        return tareaEncontrada
+    } else {
+        alert('tarea no encontrada')
     }
-   
-
-
-//if (tareaEncontrada) {
-  //  return tareaEncontrada
-//} else {
-  //  alert("tareaEncontrada")
-//}
-
-   
-
-   // return {
-   //     "_id": "4",
-    //    "titulo": "caminata en las mañanas",
-    //    "descripcion": "salir a caminar en las mañanas",
-     //   "estado": "activa",
-     //   "responsable": "Leonardo"
-    //}
-
-
+}
 
 const editarTarea = async (id, tareaEditada) => {
     // enviar consulta a la API para obtener la tarea con el id
-   // alert('tarea editada')
-   const tareasEditadas = tareas.map((tarea) => {
-    if (id === tarea._id) {
-        tareaEditada._id = id
-        return tareaEditada
-    }
-     return tarea
+    // alert('tarea editada')
 
-   })
-tareas = tareasEditadas
+    const listaTareasModificadas = tareas.map((tarea) => {
+        if (id === tarea._id) {
+            tareaEditada._id = id
+            return tareaEditada
+        }
+
+        return tarea
+    })
+
+    tareas = listaTareasModificadas
 }
 
 
 const eliminarTarea = async (id) => {
     // enviar consulta a la API para eliminar la tarea con el id
-   // alert('tarea eliminada')
-   const tareasFiltradas = tareas.filter((tarea) => {
-       if (tarea._id !== id) {
-        return true
-       }
-       return false
-   }) 
-   tareas = tareasFiltradas
+    // alert('tarea eliminada')
+
+    const tareasFiltradas = tareas.filter((tarea) => {
+        if (tarea._id !== id) {
+            return true
+        }
+        return false
+    })
+
+    tareas = tareasFiltradas
 }
 
 // -----------------------  Renderizar tareas en el HTML -----------------------
 const listaTareas = document.getElementById('lista-tareas')
 const renderTareas = async () => {
 
-    listaTareas.innerHTML = ""
-   // console.log("hola")
+    listaTareas.innerHTML = ''
+    
     const listaTareasObtenidas = await obtenerTareas()
 
-    // bucle para recorrer cada tarea
-listaTareasObtenidas.forEach((tarea) => {
-//console.log(tarea)
+    // blucle para recorrer cada tarea
+    listaTareasObtenidas.forEach((tarea) => {
+        //console.log(tarea)
 
-const listItem = document.createElement("li")
-const article = document.createElement("article")
-const datos = document.createElement("div")
-datos.classList.add("tarea")
+        const listItem = document.createElement('li')
+        const article = document.createElement('article')
+        const datos = document.createElement('div')
+        datos.classList.add('tarea')
 
-const titulo = document.createElement("h4")
-const estado = document.createElement("p")
-const responsable = document.createElement("p")
+        const titulo = document.createElement('h4')
+        const estado = document.createElement('p')
+        const responsable = document.createElement('p')
 
-titulo.innerText = `Titulo: ${tarea.titulo}` 
-estado.innerText = `Estado: ${tarea.estado}`
-responsable.innerText = `responsable: ${tarea.responsable}`
+        //titulo.innerText = `Titulo: ${tarea.titulo}`
+        titulo.innerText = 'Titulo: ' + tarea.titulo
+        estado.innerText = `Estado: ${tarea.estado}`
+        responsable.innerText = `Responsable: ${tarea.responsable}`
+
+        datos.appendChild(titulo)
+        datos.appendChild(estado)
+        datos.appendChild(responsable)
+
+        article.appendChild(datos)
+        listItem.appendChild(article)
+
+        listaTareas.appendChild(listItem)
+
+        // ------ botones --------
+        const wrapperBotones = document.createElement('div')
+        wrapperBotones.classList.add('wrapper-botones')
+
+        const buttonVerMas = document.createElement('button')
+        const buttonEditar = document.createElement('button')
+        const buttonEliminar = document.createElement('button')
+
+        buttonVerMas.innerText = 'Ver más'
+        buttonEditar.innerText = 'Editar'
+        buttonEliminar.innerText = 'Eliminar'
+
+        wrapperBotones.appendChild(buttonVerMas)
+        wrapperBotones.appendChild(buttonEditar)
+        wrapperBotones.appendChild(buttonEliminar)
+
+        article.appendChild(wrapperBotones)
+
+        // ------- agregar evento click al boton Ver Mas --------
+        buttonVerMas.addEventListener('click', async () => {
+            // console.log(tarea._id)
+            const tareaObtenida = await verTarea(tarea._id)
+            // console.log(tareaObtenida)
+
+            const descripcion = document.createElement('p')
+            descripcion.innerText = `Descripción: ${tareaObtenida.descripcion}`
+            datos.appendChild(descripcion)
+
+            // desabilitar el boton
+            buttonVerMas.disabled = true
+        })
+
+        // ------- agregar evento click al boton editar
+        buttonEditar.addEventListener('click', async () => {
+            // console.log(tarea._id)
+
+            const wrapperEditarTarea = document.getElementById('wrapper-form-editar')
+            wrapperEditarTarea.style.display = 'grid'
+
+            const tareaObtenida = await verTarea(tarea._id)
+
+            const inputEditarTitulo = document.getElementById('editar-titulo')
+            const inputEditarDescripcion = document.getElementById('editar-descripcion')
+            const inputEditarResponsable = document.getElementById('editar-responsable')
+            const inputEditarEstado = document.getElementById('editar-estado')
+
+            inputEditarTitulo.value = tareaObtenida.titulo
+            inputEditarDescripcion.value = tareaObtenida.descripcion
+            inputEditarResponsable.value = tareaObtenida.responsable
+            inputEditarEstado.value = tareaObtenida.estado
+
+            const formEditarTarea = document.getElementById('form-editar-tarea')
+            formEditarTarea.addEventListener('submit', async (event) => {
+                event.preventDefault()
+
+                const data = Object.fromEntries(new FormData(event.target))
+
+                await editarTarea(tarea._id, data)
+
+                wrapperEditarTarea.style.display = 'none'
+
+                renderTareas()
+
+            })
+
+        })
+
+        // ------------ agregar evento click al boton eliminar -----------
+        buttonEliminar.addEventListener('click', async () => {
+            await eliminarTarea(tarea._id)
+            renderTareas()
+        })
 
 
-datos.appendChild(titulo)
-datos.appendChild(estado)
-datos.appendChild(responsable)
-
-article.appendChild(datos)
-listItem.appendChild(article)
-
-listaTareas.appendChild(listItem)
-
-// ---botones------
-const wrapperBotones = document.createElement("div")
-wrapperBotones.classList.add("wrapper-botones")
-
-const buttonVerMas = document.createElement("button")
-const buttonEditar = document.createElement("button")
-const buttonEliminar = document.createElement("button")
-
-buttonVerMas.innerText = "Ver más"
-buttonEditar.innerText = "Editar"
-buttonEliminar. innerText = "Eliminar"
-
-wrapperBotones.appendChild(buttonVerMas)
-wrapperBotones.appendChild(buttonEditar)
-wrapperBotones.appendChild(buttonEliminar)
-
-article.appendChild(wrapperBotones)
-
-//  ------agregar evento click al boton ver mas---
-buttonVerMas.addEventListener("click", async () => {
-    //console.log(tarea._id)
-    const tareaObtenida = await verTarea(tarea._id)
-   // console.log(tareaObtenida)
-
-   const descripcion = document.createElement("p")
-   descripcion.innerText = `Descripción: ${tareaObtenida.descripcion}`
-   datos.appendChild(descripcion)
-
-   // deshabilitar boton----
-   buttonVerMas.disabled = true
-})
-// agregar evento al boton editar---
-buttonEditar.addEventListener("click", async () => {
-//console.log(tarea._id)
-
-const wrapperEditarTarea = document.getElementById("wrapper-form-editar")
-wrapperEditarTarea.style.display = "grid"
-
-const tareaObtenida = await verTarea(tarea._id)
-
-const inputEditarTitulo = document.getElementById("editar-titulo")
-const inputEditarDescripcion = document.getElementById("editar-descripcion")
-const inputEditarResponsable = document.getElementById("editar-responsable")
-const inputEditarEstado = document.getElementById("editar-estado")
-
-inputEditarTitulo.value = tareaObtenida.titulo
-inputEditarDescripcion.value = tareaObtenida.descripcion
-inputEditarResponsable.value = tareaObtenida.responsable
-inputEditarEstado.value = tareaObtenida.estado
-
-const formEditarTarea = document.getElementById("form-editar-tarea")
-formEditarTarea.addEventListener("submit", async (event) => {
- event.preventDefault()
-
- const data = Object.fromEntries(new FormData(event.target))
-
- await editarTarea(tarea._id, data)
-
- wrapperEditarTarea.style.display = "none"
- renderTareas()
- 
-})
-
-})
-// -----agregar evento click al boton eliminar----
-buttonEliminar.addEventListener("click", async () => {
-    await eliminarTarea(tarea._id)
-    renderTareas()
-
-})
-
-})
+    })
 
 }
 
@@ -237,21 +226,23 @@ buttonCerrarFormEditar.addEventListener('click', () => {
 
 // -----------------------  Crear tarea -----------------------
 const formCrearTarea = document.getElementById('form-crear-tarea')
-formCrearTarea.addEventListener('submit', async (e) => {
-     e.preventDefault()
 
-     // prevenir el comportamiento por defecto del formulario
+formCrearTarea.addEventListener('submit', async (event) => {
+    // prevenir el comportamiento por defecto del formulario
+    event.preventDefault()
 
-     const data = Object.fromEntries(new FormData(e.target)) 
-     console.log(data)
-     await crearTarea(data)
+    // leer los datos del formulario
+    const data = Object.fromEntries(new FormData(event.target))
+    console.log(data)
 
-     // ocultar formulario de crear tarea----
-     wrapperFormCrear.style.display = 'none'
+    await crearTarea(data)
 
+    // ocultar formulario de crear tarea
+    wrapperFormCrear.style.display = 'none'
 
-     renderTareas()
-
+    // es necesario volver a renderizar las tareas
+    renderTareas()
+    
 })
 
 // -----------------------  Filtrar tareas por estado -----------------------
