@@ -1,3 +1,5 @@
+let estado = ""
+
 let tareas = [
     {
         "_id": "1",
@@ -32,16 +34,35 @@ let tareas = [
 const crearTarea = async (tarea) => {
     // enviar consulta a la API para crear una tarea
     // alert('tarea creada')
-
-    tarea.estado = 'inactiva'
-    tareas.push(tarea)
+await fetch("http://localhost:3000/api/v1/tareas", {
+method: "POST",
+body: JSON.stringify(tareas),
+Headers: {
+    "content-Type": "aplication/json"
+}
+})
+   // tarea.estado = 'inactiva'
+   // tareas.push(tarea)
 }
 
 const obtenerTareas = async () => {
     // enviar consulta a la API para obtener todas las tareas
 
-    return tareas
-}
+    let query = ""
+    if (estado) {
+        query = "?estado=" + estado
+    }
+    const response = await fetch("http://localhost:3000/api/v1/tareas", + query)
+    const data = await response.json()
+        
+       
+     return data.data
+        })
+
+    
+
+   // return tareas
+
 
 const verTarea = async (id) => {
     // enviar consulta a la API para obtener la tarea con el id
@@ -62,34 +83,42 @@ const verTarea = async (id) => {
 
 const editarTarea = async (id, tareaEditada) => {
     // enviar consulta a la API para obtener la tarea con el id
-    // alert('tarea editada')
+    // alert(http://localhost:3000/api/v1/tareas'tarea editada')
+await fetch("http://localhost:3000/api/v1/tareas/" + id, {
+    method: "PUT",
+    body: JSON.stringify(tareaEditada),
+    headers: {
+        "Content-Type" : "application/json"
+    }
+})
+    //* const listaTareasModificadas = tareas.map((tarea) => {
+        //if (id === tarea._id) {
+          //  tareaEditada._id = id
+          //  return tareaEditada
+       // }
 
-    const listaTareasModificadas = tareas.map((tarea) => {
-        if (id === tarea._id) {
-            tareaEditada._id = id
-            return tareaEditada
-        }
+       // return tarea
+   // })
 
-        return tarea
-    })
-
-    tareas = listaTareasModificadas
+    //tareas = listaTareasModificadas
 }
 
 
 const eliminarTarea = async (id) => {
     // enviar consulta a la API para eliminar la tarea con el id
     // alert('tarea eliminada')
-
-    const tareasFiltradas = tareas.filter((tarea) => {
-        if (tarea._id !== id) {
-            return true
+await fetch("http://localhost:3000/api/v1/tareas" + id, {
+    method: "DELETE"
+})
+    //const tareasFiltradas = tareas.filter((tarea) => {
+        //if (tarea._id !== id) {
+         //   return true
         }
-        return false
-    })
+       // return false
+    
 
     tareas = tareasFiltradas
-}
+
 
 // -----------------------  Renderizar tareas en el HTML -----------------------
 const listaTareas = document.getElementById('lista-tareas')
@@ -249,6 +278,9 @@ formCrearTarea.addEventListener('submit', async (event) => {
 let estado = ''
 const selectEstado = document.getElementById('select-estado')
 selectEstado.addEventListener('change', (e) => {
+    console.log(e.target.value)
+    estado = e.target.value
+    renderTareas.tareas()
 })
 
 window.addEventListener('load', renderTareas)
